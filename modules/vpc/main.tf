@@ -39,6 +39,7 @@ resource "google_compute_subnetwork" "private" {
     range_name    = "k8s-service-range"
     ip_cidr_range = "10.52.0.0/20"
   }
+  private_ipv6_google_access = true
 }
 resource "google_compute_router" "router" {
   name    = "${var.clustername}-router"

@@ -45,12 +45,26 @@ resource "google_container_cluster" "primary" {
   }
 
   node_config {
+    shielded_instance_config {
+      enable_secure_boot = true
+    }
     workload_metadata_config {
       mode = var.mode
     }
   }
 
  
+  pod_security_policy_config {
+    enabled = true
+  }
+  master_auth {
+    client_certificate_config {
+      issue_client_certificate = false
+    }
+  }
+  network_policy {
+  }
+  enable_intranode_visibility = true
 }
 
 resource "google_service_account" "kubernetes" {
@@ -69,6 +83,9 @@ resource "google_container_node_pool" "general" {
   }
 
   node_config {
+    shielded_instance_config {
+      enable_secure_boot = true
+    }
     preemptible  = false
     machine_type = var.machinetype
     image_type   = var.imagetype
